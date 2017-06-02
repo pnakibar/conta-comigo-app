@@ -1,7 +1,7 @@
-import { DrawerNavigator, StackNavigator } from 'react-navigation';
+import { DrawerNavigator } from 'react-navigation';
 import Dashboard from './containers/Dashboard';
 
-const generalNavigator = DrawerNavigator({
+const GeneralNavigator = DrawerNavigator({
   Home: {
     screen: Dashboard,
   },
@@ -19,4 +19,4 @@ const generalNavigator = DrawerNavigator({
   },
 });
 
-export default generalNavigator;
+export default GeneralNavigator;
