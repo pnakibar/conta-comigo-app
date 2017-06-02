@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
-import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
-import defaults from './../defaults';
-import logo from './../res/logo-with-name.png';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
+import defaults from "./../defaults";
+import logo from "./../res/logo-with-name.png;
 
 const styles = StyleSheet.create({
   combo: {
@@ -31,6 +30,9 @@ const styles = StyleSheet.create({
 });
 
 export default class Login extends Component {
+  static navigationOptions = {
+    drawerLabel: 'Login',
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -43,7 +45,7 @@ export default class Login extends Component {
   login() {
     const { email, password } = this.state;
     console.log(email, password);
-    Actions.dashboard();
+    this.props.navigation.navigate('Dashboard');
   }
 
   render() {
