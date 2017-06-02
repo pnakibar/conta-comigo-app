@@ -11,6 +11,7 @@
     "eslint-config-airbnb": "^15.0.1",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
+    "react-native-drawer": "^2.3.0",
     "react-native-router-flux": "^3.39.2"
   },
   "devDependencies": {
