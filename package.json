@@ -18,7 +18,8 @@
     "react-native-navbar": "^1.7.1",
     "react-native-router-flux": "^3.39.2",
     "react-native-vector-icons": "^4.2.0",
-    "react-navigation": "^1.0.0-beta.11"
+    "react-navigation": "^1.0.0-beta.11",
+    "tcomb-form-native": "^0.6.8"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
