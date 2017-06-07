@@ -36,6 +36,11 @@ const style = StyleSheet.create({
   buttonText: {
     fontSize: 24,
   },
+  buttonLabel: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'black',
+  },
 });
 
 export default class ModalSelector extends Component {
@@ -84,17 +89,25 @@ export default class ModalSelector extends Component {
   }
 
   renderButton() {
+    const label = this.props.buttonLabel
+      ? <Text style={style.buttonLabel}>{this.props.buttonLabel}</Text>
+      : null;
     return (
-      <TouchableOpacity
-        onPress={() => this.setState({ isVisible: !this.state.isVisible })}
-      >
-        <View style={style.buttonContainer}>
-          <Text style={style.buttonText}>
-            {this.state.selected.label || 'Selecione...'}
-          </Text>
-          <Icon name="search" style={style.buttonText} />
-        </View>
-      </TouchableOpacity>
+      <View>
+        {label}
+        <TouchableOpacity
+          onPress={() => this.setState({ isVisible: !this.state.isVisible })}
+        >
+          <View style={style.buttonContainer}>
+            <Text style={style.buttonText}>
+              {this.props.selectedData ||
+                this.state.selected.label ||
+                this.props.defaultButtonText}
+            </Text>
+            <Icon name="search" style={style.buttonText} />
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -123,16 +136,21 @@ export default class ModalSelector extends Component {
 }
 
 ModalSelector.propTypes = {
-  label: PropTypes.string,
+  buttonLabel: PropTypes.string,
   onChangeFilter: PropTypes.func,
   data: PropTypes.arrayOf(
     PropTypes.shape({ label: PropTypes.string.isRequired }),
   ),
   onSelectData: PropTypes.func,
+  selectedData: PropTypes.string,
+  defaultButtonText: PropTypes.string,
 };
 ModalSelector.defaultProps = {
   label: 'Filtro',
   onChangeFilter: undefined,
   data: [],
+  selectedData: undefined,
   onSelectData: () => {},
+  defaultButtonText: 'Selecione...',
+  buttonLabel: undefined,
 };
