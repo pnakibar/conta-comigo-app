@@ -49,7 +49,11 @@ export default class Dashboard extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Navbar titleString="Vendas" onPressLeft={() => this.openDrawer()} />
+        <Navbar
+          titleString="Nova Venda"
+          onPressLeft={() => this.props.navigation.goBack()}
+          iconName="close"
+        />
         <View style={styles.container}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Visão Geral</Text>
@@ -64,7 +68,6 @@ export default class Dashboard extends Component {
             />
           </View>
         </View>
-        <ActionButton navigation={this.props.navigation} />
       </View>
     );
   }
