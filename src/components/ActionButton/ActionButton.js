@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import defaults from './../defaults';
+import defaults from './../../defaults';
 
 const DefaultIcon = props => <Icon {...props} size={24} color="#FFF" />;
 export default class MyActionButton extends Component {

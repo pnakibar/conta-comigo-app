@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
-import ActionButton from './../components/ActionButton';
+import ActionButton from './ActionButton';
 
 export default class MetaContainer extends Component {
   render() {

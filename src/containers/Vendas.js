@@ -48,24 +48,25 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Navbar titleString="Vendas" onPressLeft={() => this.openDrawer()} />
-        <View style={styles.container}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Visão Geral</Text>
-          </View>
-          <View style={styles.salesContainer}>
-            <SalesList
-              data={[
-                { label: 'March 2017', value: 'R$3000,00' },
-                { label: 'March 2017', value: 'R$3000,00' },
-              ]}
-              onTouch={label => console.log(label)}
-            />
+      <ActionButton {...this.props}>
+        <View style={{ flex: 1 }}>
+          <Navbar titleString="Vendas" onPressLeft={() => this.openDrawer()} />
+          <View style={styles.container}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Visão Geral</Text>
+            </View>
+            <View style={styles.salesContainer}>
+              <SalesList
+                data={[
+                  { label: 'March 2017', value: 'R$3000,00' },
+                  { label: 'March 2017', value: 'R$3000,00' },
+                ]}
+                onTouch={label => console.log(label)}
+              />
+            </View>
           </View>
         </View>
-        <ActionButton navigation={this.props.navigation} />
-      </View>
+      </ActionButton>
     );
   }
 }

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, View } from 'react-native';
 import ValueShow from './../components/ValueShow';
-import ActionButton from './../components/ActionButton';
 import Navbar from './../components/Navbar';
 import defaults from './../defaults';
-import MetaContainer from './MetaContainer';
+import ActionButton from './../components/ActionButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
 export default class Dashboard extends Component {
   render() {
     return (
-      <MetaContainer {...this.props}>
+      <ActionButton {...this.props}>
         <View style={{ flex: 1 }}>
           <Navbar
             titleString="Bem vindo!"
@@ -67,7 +66,7 @@ export default class Dashboard extends Component {
             </View>
           </View>
         </View>
-      </MetaContainer>
+      </ActionButton>
     );
   }
 }
