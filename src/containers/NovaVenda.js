@@ -1,56 +1,49 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import {
-  FormLabel,
-  FormInput,
-  FormValidationMessage,
-} from 'react-native-elements';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
+import t from 'tcomb-form-native';
+import faker from 'faker';
 
 import Navbar from './../components/Navbar';
-import SalesList from './../components/SalesList';
+import ModalSelector from './../components/ModalSelector';
 import defaults from './../defaults';
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  formContainer: {
-    paddingLeft: 30,
-    paddingRight: 30,
+    padding: 50,
   },
 });
+
+const Form = t.form.Form;
+const Venda = t.struct({
+  cliente: t.String,
+  item: t.String,
+});
+const formOptions = {};
 
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.openDrawer = this.openDrawer.bind(this);
-    this.openNewVenda = this.openNewVenda.bind(this);
-  }
-
-  openDrawer() {
-    this.props.navigation.navigate('DrawerOpen');
-  }
-
-  openNewVenda() {
-    this.props.navigation.navigate('NewVenda');
   }
 
   render() {
+    const randomName = [];
+    for (let index = 0; index < 15; index++) {
+      randomName.push({ label: faker.name.findName() });
+    }
+
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <Navbar
           titleString="Nova Venda"
           onPressLeft={() => this.props.navigation.goBack()}
           iconName="close"
         />
-        <View style={styles.container}>
-          <View style={styles.formContainer}>
-            <FormLabel>Name</FormLabel>
-            <FormInput />
-            <FormValidationMessage>ErrorMessage</FormValidationMessage>
-          </View>
-        </View>
+        <ScrollView style={styles.container}>
+          <Form type={Venda} options={formOptions} />
+          <ModalSelector data={randomName} />
+          <Button title="Salvar" backgroundColor={defaults.color.main} />
+        </ScrollView>
       </View>
     );
   }
