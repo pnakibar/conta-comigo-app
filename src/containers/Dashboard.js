@@ -43,27 +43,6 @@ export default class Dashboard extends Component {
                 message="Valor atualizado de contas a receber"
               />
             </View>
-            <View style={[styles.paddingBottom10]}>
-              <Button
-                icon={{ name: 'plus', type: 'font-awesome' }}
-                title="Cadastre nova venda"
-                backgroundColor={defaults.color.main}
-              />
-            </View>
-            <View style={[styles.paddingBottom10]}>
-              <Button
-                icon={{ name: 'plus', type: 'font-awesome' }}
-                title="Cadastre novo cliente"
-                backgroundColor={defaults.color.main}
-              />
-            </View>
-            <View style={[styles.paddingBottom10]}>
-              <Button
-                icon={{ name: 'plus', type: 'font-awesome' }}
-                title="Cadastre novo item"
-                backgroundColor={defaults.color.main}
-              />
-            </View>
           </View>
         </View>
       </ActionButton>
