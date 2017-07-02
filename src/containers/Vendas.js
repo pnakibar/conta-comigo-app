@@ -6,6 +6,7 @@ import { Spinner } from 'native-base';
 import _ from 'lodash';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import numeral from 'numeral';
 
 import { actions as vendasActions } from './../state/vendas';
 import ActionButton from './../components/ActionButton';
@@ -86,6 +87,11 @@ class Vendas extends Component {
                   Number(a.quantity) * Number(a.product_id.price);
                 return acc + totalValue;
               }, 0),
+            })),
+          v =>
+            v.map(value => ({
+              ...value,
+              value: `R$ ${numeral(value.value).format('0.00')}`,
             })),
         )(vendasState.data)
       : [];
