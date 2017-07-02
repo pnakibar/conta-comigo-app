@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import t from 'tcomb-form-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import { actions as clientesActions } from './../state/clientes';
 import Navbar from './../components/Navbar';
 import defaults from './../defaults';
 
@@ -16,14 +19,24 @@ const Form = t.form.Form;
 const Cliente = t.struct({
   nome: t.String,
   telefone: t.Number,
-  // endereco: t.String,
-  // bairro: t.String,
-  // cidade: t.String,
+  email: t.String,
 });
 
-export default class Dashboard extends Component {
+class NovoCliente extends Component {
   constructor(props) {
     super(props);
+    this.save = this.save.bind(this);
+  }
+
+  save() {
+    const { nome, telefone, email } = this.refs.form.getValue();
+    const payload = {
+      name: nome,
+      phone: telefone,
+      email,
+    };
+    this.props.clientesActions.create(payload);
+    this.props.navigation.navigate('Clientes');
   }
 
   render() {
@@ -35,10 +48,21 @@ export default class Dashboard extends Component {
           iconName="close"
         />
         <ScrollView style={styles.container}>
-          <Form type={Cliente} />
-          <Button title="Salvar" backgroundColor={defaults.color.main} />
+          <Form type={Cliente} ref="form" />
+          <Button
+            title="Salvar"
+            backgroundColor={defaults.color.main}
+            onPress={() => this.save()}
+          />
         </ScrollView>
       </View>
     );
   }
 }
+
+export default connect(
+  () => ({}),
+  dispatch => ({
+    clientesActions: bindActionCreators(clientesActions, dispatch),
+  }),
+)(NovoCliente);
