@@ -5,12 +5,14 @@
  */
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import configureStore from './store/configureStore';
 import Router from './router';
-import FAB from './components/ActionButton';
+
+const store = configureStore();
 
 export default class contacomigo extends Component {
   render() {
-    return <Router />;
+    return <Provider store={store}><Router /></Provider>;
   }
 }

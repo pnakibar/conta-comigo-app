@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { Spinner } from 'native-base';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import ValueShow from './../components/ValueShow';
 import Navbar from './../components/Navbar';
 import defaults from './../defaults';
 import ActionButton from './../components/ActionButton';
+import { actions as vendasActions } from './../state/vendas';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,8 +22,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
+  componentWillMount() {
+    this.props.vendasActions.fetch();
+  }
   render() {
+    const { vendasState } = this.props;
+    console.log(vendasState);
+    const totalVendas = vendasState.hasData
+      ? vendasState.data.filter(x => x.id).reduce((acc, a) => acc + a.id, 0)
+      : '0.00';
+    const totalEmAberto = vendasState.hasData
+      ? vendasState.data.filter(x => !x.id).reduce((acc, a) => acc + a.id, 0)
+      : '0.00';
     return (
       <ActionButton {...this.props}>
         <View style={{ flex: 1 }}>
@@ -29,19 +44,24 @@ export default class Dashboard extends Component {
           />
           <View style={styles.container}>
             <View style={[styles.paddingBottom10]}>
-              <ValueShow
-                label="Volume de vendas"
-                value="R$ 5000,00"
-                message="Vendas realizadas até o dia de hoje"
-              />
+              {vendasState.isFetching === true
+                ? <Spinner />
+                : <ValueShow
+                  label="Volume de vendas"
+                  value={`R$ ${totalVendas}`}
+                  message="Vendas realizadas até o dia de hoje"
+                />}
+
             </View>
             <View style={[styles.paddingBottom50]}>
-              <ValueShow
-                label="Contas em aberto"
-                value="R$ 300,00"
-                valueColor="#F11"
-                message="Valor atualizado de contas a receber"
-              />
+              {vendasState.isFetching === true
+                ? <Spinner />
+                : <ValueShow
+                  label="Contas em aberto"
+                  value={`R$ ${totalEmAberto}`}
+                  valueColor="#F11"
+                  message="Valor atualizado de contas a receber"
+                />}
             </View>
           </View>
         </View>
@@ -49,3 +69,12 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+export default connect(
+  state => ({
+    vendasState: state.vendas,
+  }),
+  dispatch => ({
+    vendasActions: bindActionCreators(vendasActions, dispatch),
+  }),
+)(Dashboard);

@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "faker": "^4.1.0",
@@ -23,6 +24,10 @@
     "react-native-router-flux": "^3.39.2",
     "react-native-vector-icons": "^4.2.0",
     "react-navigation": "^1.0.0-beta.11",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.1",
+    "redux-react": "^2.0.0",
+    "redux-thunk": "^2.2.0",
     "tcomb-form-native": "^0.6.8"
   },
   "devDependencies": {
