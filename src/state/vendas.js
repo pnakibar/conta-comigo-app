@@ -6,32 +6,37 @@ export const types = {
 };
 
 export const actions = {
-  fetch() {
-    return (dispatch) => {
-      dispatch({ type: types.IS_FETCHING });
-      axios
-        .get('https://protected-bastion-53873.herokuapp.com/api/orders', {
-          headers: {
-            Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
-          },
-        })
-        .then((response) => {
-          const data = response.data.data;
-          console.log(data);
-          dispatch({
-            type: types.HAS_FETCHED,
-            data,
-            hasData: data.length > 0,
+  fetch(refresh = false) {
+    return (dispatch, getState) => {
+      const { vendas } = getState();
+      const doesNotHaveData = !vendas.hasData;
+      const isNotFetching = !vendas.isFetching;
+      if (refresh || doesNotHaveData || isNotFetching) {
+        dispatch({ type: types.IS_FETCHING });
+        axios
+          .get('https://protected-bastion-53873.herokuapp.com/api/orders', {
+            headers: {
+              Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
+            },
+          })
+          .then((response) => {
+            const data = response.data.data;
+            console.log(data);
+            dispatch({
+              type: types.HAS_FETCHED,
+              data,
+              hasData: data.length > 0,
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            dispatch({
+              type: types.HAS_FETCHED,
+              data: [],
+              hasData: false,
+            });
           });
-        })
-        .catch((e) => {
-          console.log(e);
-          dispatch({
-            type: types.HAS_FETCHED,
-            data: [],
-            hasData: false,
-          });
-        });
+      }
     };
   },
 };

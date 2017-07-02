@@ -4,6 +4,7 @@ import Vendas from './containers/Vendas';
 import NovaVenda from './containers/NovaVenda';
 import NovoCliente from './containers/NovoCliente';
 import NovoItem from './containers/NovoItem';
+import Items from './containers/Items';
 
 const GeneralNavigator = StackNavigator(
   {
@@ -17,7 +18,7 @@ const GeneralNavigator = StackNavigator(
           label: 'Vendas',
         },
         Itens: {
-          screen: Dashboard,
+          screen: Items,
         },
         Clientes: {
           screen: Dashboard,

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 
 class Dashboard extends Component {
   componentWillMount() {
-    this.props.vendasActions.fetch();
+    this.props.vendasActions.fetch(true);
   }
   render() {
     const { vendasState } = this.props;
