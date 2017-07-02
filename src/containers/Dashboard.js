@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, View, Text } from 'react-native';
+import numeral from 'numeral';
 import { Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -48,7 +49,7 @@ class Dashboard extends Component {
                 ? <Spinner />
                 : <ValueShow
                   label="Volume de vendas"
-                  value={`R$ ${totalVendas}`}
+                  value={`R$ ${numeral(totalVendas).format('0.00')}`}
                   message="Vendas realizadas até o dia de hoje"
                 />}
 
@@ -58,7 +59,7 @@ class Dashboard extends Component {
                 ? <Spinner />
                 : <ValueShow
                   label="Contas em aberto"
-                  value={`R$ ${totalEmAberto}`}
+                  value={`R$ ${numeral(totalEmAberto).format('0.00')}`}
                   valueColor="#F11"
                   message="Valor atualizado de contas a receber"
                 />}
