@@ -8,9 +8,9 @@ export const types = {
 };
 function fetch(refresh = false) {
   return (dispatch, getState) => {
-    const { vendas } = getState();
-    const doesNotHaveData = !vendas.hasData;
-    const isNotFetching = !vendas.isFetching;
+    const { items } = getState();
+    const doesNotHaveData = !items.hasData;
+    const isNotFetching = !items.isFetching;
     if (refresh || doesNotHaveData || isNotFetching) {
       dispatch({ type: types.IS_FETCHING });
       axios

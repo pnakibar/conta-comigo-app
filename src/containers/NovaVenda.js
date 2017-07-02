@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Text, TextInput } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Button } from 'react-native-elements';
 import faker from 'faker';
 import _ from 'lodash';
+import numeral from 'numeral';
+import t from 'tcomb-form-native';
+import moment from 'moment';
 
 import Navbar from './../components/Navbar';
 import ModalSelector from './../components/ModalSelector';
 import Label from './../components/Label';
 import defaults from './../defaults';
+
+import { actions as clientesActions } from './../state/clientes';
+import { actions as itemsActions } from './../state/items';
+import { actions as vendasActions } from './../state/vendas';
+
+const Form = t.form.Form;
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Dashboard extends Component {
+class NovaVenda extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,6 +53,7 @@ export default class Dashboard extends Component {
     this.save = this.save.bind(this);
     this.validate = this.validate.bind(this);
     this.setCliente = this.setCliente.bind(this);
+    this.calculateTotal = this.calculateTotal.bind(this);
   }
   setCliente(cliente) {
     this.setState({ cliente });
@@ -79,11 +91,7 @@ export default class Dashboard extends Component {
     if (products.length === 0) return invalidate();
     const validateProducts = _.map(
       products,
-      product =>
-        _.has(product, 'qty') &&
-        Number(product.qty) > 0 &&
-        _.has(product, 'label') &&
-        _.has(product, 'preco'),
+      product => _.has(product, 'qty') && Number(product.qty) > 0,
     );
     const isProductsValid = _.reduce(validateProducts, (a, b) => a && b);
     if (!isProductsValid) {
@@ -93,40 +101,65 @@ export default class Dashboard extends Component {
   }
 
   save() {
-    this.props.navigation.goBack();
+    const { cliente, products } = this.state;
+    const { date } = this.refs.form.getValue();
+
+    const payload = {
+      customer_id: cliente.id,
+      date,
+      items: products.map(x => ({ product_id: x.data.id, quantity: x.qty })),
+    };
+
+    this.props.vendasActions.create(payload);
+    this.props.navigation.navigate('Vendas');
   }
 
   renderProducts() {
-    const randomName = [];
-    for (let index = 0; index < 15; index++) {
-      randomName.push({ label: faker.name.findName(), preco: 2500 });
-    }
+    const { itemsState } = this.props;
+    const items = itemsState.data.length > 0
+      ? itemsState.data.map(c => ({
+        ...c,
+        label: `${c.name} - R$ ${numeral(c.price).format('0.00')}`,
+      }))
+      : [];
     return this.state.products.map((product, i) => (
       <View key={`product-selector-${i}`} style={styles.produtoContainer}>
         <ModalSelector
           buttonLabel="Produto"
-          data={randomName}
-          onSelectData={data =>
-            this.updateProduct(i, {
-              label: data.label,
-              preco: data.preco,
-              produto: data,
-            })}
+          data={items}
+          onSelectData={data => this.updateProduct(i, { data, qty: 1 })}
         />
         <Label name="Quantidade" />
         <TextInput
           keyboardType="numeric"
+          value={`${this.state.products[i].qty}`}
           onChangeText={n => this.updateProduct(i, { qty: n })}
         />
       </View>
     ));
   }
 
+  componentWillMount() {
+    this.props.clientesActions.fetch(true);
+    this.props.itemsActions.fetch(true);
+  }
+  calculateTotal() {
+    const total = this.state.products.reduce((acc, a) => {
+      if (!a.data) return acc;
+      const price = Number(a.qty) * Number(a.data.price);
+      return acc + price;
+    }, 0);
+    return total;
+  }
   render() {
-    const randomName = [];
-    for (let index = 0; index < 15; index++) {
-      randomName.push({ label: faker.name.findName(), preco: 2500 });
-    }
+    const { clientesState } = this.props;
+    const clientes = clientesState.data.length > 0
+      ? clientesState.data.map(c => ({
+        ...c,
+        label: c.name || 'no_visible_name',
+      }))
+      : [];
+
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <Navbar
@@ -138,11 +171,33 @@ export default class Dashboard extends Component {
           <View style={styles.clienteContainer}>
             <ModalSelector
               buttonLabel="Cliente"
-              data={randomName}
+              data={clientes}
               onSelectData={data => this.setCliente(data)}
             />
           </View>
           {this.renderProducts()}
+          <View style={styles.pd10}>
+            <Form
+              ref="form"
+              type={t.struct({ date: t.Date })}
+              options={{
+                fields: {
+                  date: {
+                    label: 'Data de venda',
+                    config: {
+                      format: date => moment(date).format('DD/MM/YYYY'),
+                    },
+                  },
+                },
+              }}
+            />
+          </View>
+          <View style={styles.pd10}>
+            <Text style={{ fontSize: 24 }}>
+              Total:
+              {`R$ ${numeral(this.calculateTotal()).format('0.00')}`}
+            </Text>
+          </View>
           <View style={styles.pd10}>
             <Button
               title="RemoverProduto"
@@ -172,3 +227,15 @@ export default class Dashboard extends Component {
     );
   }
 }
+export default connect(
+  state => ({
+    clientesState: state.clientes,
+    vendasState: state.vendas,
+    itemsState: state.items,
+  }),
+  dispatch => ({
+    clientesActions: bindActionCreators(clientesActions, dispatch),
+    itemsActions: bindActionCreators(itemsActions, dispatch),
+    vendasActions: bindActionCreators(vendasActions, dispatch),
+  }),
+)(NovaVenda);
