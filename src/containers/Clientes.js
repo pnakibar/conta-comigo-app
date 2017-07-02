@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Spinner } from 'native-base';
 import numeral from 'numeral';
+import _ from 'lodash';
 
 import ActionButton from './../components/ActionButton';
 import { actions as clientesActions } from './../state/clientes';
@@ -41,6 +42,7 @@ class Clientes extends Component {
   constructor(props) {
     super(props);
     this.openDrawer = this.openDrawer.bind(this);
+    this.renderSalesList = this.renderSalesList.bind(this);
   }
 
   openDrawer() {
@@ -51,9 +53,27 @@ class Clientes extends Component {
     this.props.clientesActions.fetch(true);
   }
 
+  renderSalesList() {
+    const { clientesState } = this.props;
+    console.log(clientesState.data);
+    const data = clientesState.data.map(value => ({
+      label: value.name || 'no_visible_name',
+      value: _.flow(
+        v => _.flatMap(v, orders => orders.items),
+        v =>
+          v.reduce((acc, a) => {
+            const total = Number(a.quantity) * Number(a.product_id.price);
+            return acc + total;
+          }, 0),
+        v => `R$ ${numeral(v).format('0.00')}`,
+      )(value.orders),
+    }));
+    console.log(data);
+    return <SalesList data={data} />;
+  }
+
   render() {
     const { clientesState } = this.props;
-    console.log('clientesState >>', clientesState);
     return (
       <ActionButton {...this.props}>
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -66,14 +86,7 @@ class Clientes extends Component {
               <Text style={styles.title}>Saldo de Contas</Text>
             </View>
             <View style={styles.salesContainer}>
-              {clientesState.isFetching
-                ? <Spinner />
-                : <SalesList
-                  data={clientesState.data.map(item => ({
-                    label: `${item.first_name}`,
-                    value: `${item.last_name}`,
-                  }))}
-                />}
+              {clientesState.isFetching ? <Spinner /> : this.renderSalesList()}
             </View>
           </View>
         </View>
