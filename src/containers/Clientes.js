@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
 class Clientes extends Component {
   constructor(props) {
     super(props);
+    this.openDrawer = this.openDrawer.bind(this);
+  }
+
+  openDrawer() {
+    this.props.navigation.navigate('DrawerOpen');
   }
 
   componentWillMount() {

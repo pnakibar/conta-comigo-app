@@ -24,9 +24,6 @@ const GeneralNavigator = StackNavigator(
         Clientes: {
           screen: Clientes,
         },
-        Configuracoes: {
-          screen: Dashboard,
-        },
       }),
     },
     NovaVenda: {
