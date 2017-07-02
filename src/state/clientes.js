@@ -44,7 +44,7 @@ function create(customer) {
     axios
       .post(
         'https://protected-bastion-53873.herokuapp.com/api/customers',
-        { product: { ...customer } },
+        { customer: { ...customer } },
       {
         headers: {
           Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
