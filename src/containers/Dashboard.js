@@ -29,7 +29,6 @@ class Dashboard extends Component {
   }
   render() {
     const { vendasState } = this.props;
-    console.log(vendasState);
     const totalVendas = vendasState.hasData
       ? vendasState.data.filter(x => x.id).reduce((acc, a) => acc + a.id, 0)
       : '0.00';

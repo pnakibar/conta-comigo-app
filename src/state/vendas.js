@@ -21,7 +21,6 @@ export const actions = {
           })
           .then((response) => {
             const data = response.data.data;
-            console.log(data);
             dispatch({
               type: types.HAS_FETCHED,
               data,
@@ -29,7 +28,6 @@ export const actions = {
             });
           })
           .catch((e) => {
-            console.log(e);
             dispatch({
               type: types.HAS_FETCHED,
               data: [],

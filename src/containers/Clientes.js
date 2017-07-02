@@ -6,7 +6,7 @@ import { Spinner } from 'native-base';
 import numeral from 'numeral';
 
 import ActionButton from './../components/ActionButton';
-import { actions as itemsActions } from './../state/items';
+import { actions as clientesActions } from './../state/clientes';
 
 import Navbar from './../components/Navbar';
 import SalesList from './../components/SalesList';
@@ -37,42 +37,36 @@ const styles = StyleSheet.create({
   },
 });
 
-class Items extends Component {
+class Clientes extends Component {
   constructor(props) {
     super(props);
-    this.openDrawer = this.openDrawer.bind(this);
-    this.openNewVenda = this.openNewVenda.bind(this);
   }
 
   componentWillMount() {
-    this.props.itemsActions.fetch(true);
-  }
-
-  openDrawer() {
-    this.props.navigation.navigate('DrawerOpen');
-  }
-
-  openNewVenda() {
-    this.props.navigation.navigate('NewVenda');
+    this.props.clientesActions.fetch(true);
   }
 
   render() {
-    const { itemsState } = this.props;
+    const { clientesState } = this.props;
+    console.log('clientesState >>', clientesState);
     return (
       <ActionButton {...this.props}>
         <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-          <Navbar titleString="Itens" onPressLeft={() => this.openDrawer()} />
+          <Navbar
+            titleString="Clientes"
+            onPressLeft={() => this.openDrawer()}
+          />
           <View style={styles.container}>
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>Itens</Text>
+              <Text style={styles.title}>Saldo de Contas</Text>
             </View>
             <View style={styles.salesContainer}>
-              {itemsState.isFetching
+              {clientesState.isFetching
                 ? <Spinner />
                 : <SalesList
-                  data={itemsState.data.map(item => ({
-                    label: item.name,
-                    value: `R$ ${numeral(item.price).format('0.00')}`,
+                  data={clientesState.data.map(item => ({
+                    label: `${item.first_name}`,
+                    value: `${item.last_name}`,
                   }))}
                 />}
             </View>
@@ -85,9 +79,9 @@ class Items extends Component {
 
 export default connect(
   state => ({
-    itemsState: state.items,
+    clientesState: state.clientes,
   }),
   dispatch => ({
-    itemsActions: bindActionCreators(itemsActions, dispatch),
+    clientesActions: bindActionCreators(clientesActions, dispatch),
   }),
-)(Items);
+)(Clientes);

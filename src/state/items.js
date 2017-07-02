@@ -21,7 +21,6 @@ function fetch(refresh = false) {
         })
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
           dispatch({
             type: types.HAS_FETCHED,
             data,
@@ -29,7 +28,6 @@ function fetch(refresh = false) {
           });
         })
         .catch((e) => {
-          console.log(e);
           dispatch({
             type: types.HAS_FETCHED,
             data: [],

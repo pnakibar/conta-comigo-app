@@ -61,7 +61,6 @@ export default class Dashboard extends Component {
                   { label: 'March 2017', value: 'R$3000,00' },
                   { label: 'March 2017', value: 'R$3000,00' },
                 ]}
-                onTouch={label => console.log(label)}
               />
             </View>
           </View>

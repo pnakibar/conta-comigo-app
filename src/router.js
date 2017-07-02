@@ -5,6 +5,7 @@ import NovaVenda from './containers/NovaVenda';
 import NovoCliente from './containers/NovoCliente';
 import NovoItem from './containers/NovoItem';
 import Items from './containers/Items';
+import Clientes from './containers/Clientes';
 
 const GeneralNavigator = StackNavigator(
   {
@@ -21,7 +22,7 @@ const GeneralNavigator = StackNavigator(
           screen: Items,
         },
         Clientes: {
-          screen: Dashboard,
+          screen: Clientes,
         },
         Configuracoes: {
           screen: Dashboard,

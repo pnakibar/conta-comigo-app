@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
 const Form = t.form.Form;
 const Cliente = t.struct({
   nome: t.String,
-  telefone: t.String,
-  endereco: t.String,
-  bairro: t.String,
-  cidade: t.String,
+  telefone: t.Number,
+  // endereco: t.String,
+  // bairro: t.String,
+  // cidade: t.String,
 });
 
 export default class Dashboard extends Component {

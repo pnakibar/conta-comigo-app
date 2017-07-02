@@ -44,7 +44,6 @@ export default class Login extends Component {
 
   login() {
     const { email, password } = this.state;
-    console.log(email, password);
     this.props.navigation.navigate('Dashboard');
   }
 
