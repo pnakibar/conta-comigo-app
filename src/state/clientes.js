@@ -28,7 +28,6 @@ function fetch(refresh = false) {
           });
         })
         .catch((e) => {
-          console.log(e);
           dispatch({
             type: types.HAS_FETCHED,
             data: [],

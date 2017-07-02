@@ -70,7 +70,6 @@ class Vendas extends Component {
               v,
               (acc, a) => {
                 const month = moment(a.date).format('MMMM');
-                console.log(month);
                 if (!acc[month]) {
                   acc[month] = [];
                 }
@@ -95,7 +94,6 @@ class Vendas extends Component {
             })),
         )(vendasState.data)
       : [];
-    console.log(data);
 
     return (
       <ActionButton {...this.props}>

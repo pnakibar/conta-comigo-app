@@ -55,7 +55,6 @@ class Clientes extends Component {
 
   renderSalesList() {
     const { clientesState } = this.props;
-    console.log(clientesState.data);
     const data = clientesState.data.map(value => ({
       label: value.name || 'no_visible_name',
       value: _.flow(
@@ -68,7 +67,6 @@ class Clientes extends Component {
         v => `R$ ${numeral(v).format('0.00')}`,
       )(value.orders),
     }));
-    console.log(data);
     return <SalesList data={data} />;
   }
 
