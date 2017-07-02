@@ -13,6 +13,7 @@
     "faker": "^4.1.0",
     "lodash": "^4.17.4",
     "native-base": "^2.1.4",
+    "numeral": "^2.0.6",
     "react": "16.0.0-alpha.12",
     "react-native": "0.45.0",
     "react-native-action-button": "^2.6.9",

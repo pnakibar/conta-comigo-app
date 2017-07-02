@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Spinner } from 'native-base';
+import numeral from 'numeral';
 
 import ActionButton from './../components/ActionButton';
 import { actions as itemsActions } from './../state/items';
@@ -72,7 +73,7 @@ class Items extends Component {
                 : <SalesList
                   data={itemsState.data.map(item => ({
                     label: item.name,
-                    value: `R$ ${item.price}`,
+                    value: `R$ ${numeral(item.price).format('0.00')}`,
                   }))}
                   onTouch={label => console.log(label)}
                 />}
