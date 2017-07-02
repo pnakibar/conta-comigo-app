@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import ActionButton from './../components/ActionButton';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Spinner } from 'native-base';
+import _ from 'lodash';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
+import { actions as vendasActions } from './../state/vendas';
+import ActionButton from './../components/ActionButton';
 import Navbar from './../components/Navbar';
 import SalesList from './../components/SalesList';
 import defaults from './../defaults';
@@ -31,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Dashboard extends Component {
+class Vendas extends Component {
   constructor(props) {
     super(props);
     this.openDrawer = this.openDrawer.bind(this);
@@ -46,22 +53,56 @@ export default class Dashboard extends Component {
     this.props.navigation.navigate('NewVenda');
   }
 
+  componentWillMount() {
+    this.props.vendasActions.fetch(true);
+  }
+
   render() {
+    const { vendasState } = this.props;
+    // boa sorte
+    moment.locale('pt');
+    const data = vendasState.hasData
+      ? _.flow(
+          v => _.flatMap(v, x => x.items),
+          v =>
+            _.reduce(
+              v,
+              (acc, a) => {
+                const month = moment(a.date).format('MMMM');
+                console.log(month);
+                if (!acc[month]) {
+                  acc[month] = [];
+                }
+                acc[month].push(a);
+                return acc;
+              },
+              {},
+            ),
+          v =>
+            Object.keys(v).map(k => ({
+              label: k,
+              value: v[k].reduce((acc, a) => {
+                const totalValue =
+                  Number(a.quantity) * Number(a.product_id.price);
+                return acc + totalValue;
+              }, 0),
+            })),
+        )(vendasState.data)
+      : [];
+    console.log(data);
+
     return (
       <ActionButton {...this.props}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#FFF' }}>
           <Navbar titleString="Vendas" onPressLeft={() => this.openDrawer()} />
           <View style={styles.container}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Visão Geral</Text>
             </View>
             <View style={styles.salesContainer}>
-              <SalesList
-                data={[
-                  { label: 'March 2017', value: 'R$3000,00' },
-                  { label: 'March 2017', value: 'R$3000,00' },
-                ]}
-              />
+              {vendasState.isFetching === true
+                ? <Spinner />
+                : <SalesList data={data} />}
             </View>
           </View>
         </View>
@@ -69,3 +110,12 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+export default connect(
+  state => ({
+    vendasState: state.vendas,
+  }),
+  dispatch => ({
+    vendasActions: bindActionCreators(vendasActions, dispatch),
+  }),
+)(Vendas);
