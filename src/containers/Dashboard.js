@@ -5,6 +5,7 @@ import numeral from 'numeral';
 import { Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 import ValueShow from './../components/ValueShow';
 import Navbar from './../components/Navbar';
 import defaults from './../defaults';
@@ -29,12 +30,19 @@ class Dashboard extends Component {
   }
   render() {
     const { vendasState } = this.props;
+    console.log(
+      _.flatMap(vendasState.data, x => x.items).reduce((acc, a) => {
+        const value = Number(a.quantity) * Number(a.product_id.price);
+        return acc + value;
+      }, 0),
+    );
     const totalVendas = vendasState.hasData
-      ? vendasState.data.filter(x => x.id).reduce((acc, a) => acc + a.id, 0)
+      ? _.flatMap(vendasState.data, x => x.items).reduce((acc, a) => {
+        const value = Number(a.quantity) * Number(a.product_id.price);
+        return acc + value;
+      }, 0)
       : '0.00';
-    const totalEmAberto = vendasState.hasData
-      ? vendasState.data.filter(x => !x.id).reduce((acc, a) => acc + a.id, 0)
-      : '0.00';
+    const totalEmAberto = '0.00';
     return (
       <ActionButton {...this.props}>
         <View style={{ flex: 1 }}>

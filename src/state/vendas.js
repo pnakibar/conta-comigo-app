@@ -14,7 +14,7 @@ function fetch(refresh = false) {
     if (refresh || doesNotHaveData || isNotFetching) {
       dispatch({ type: types.IS_FETCHING });
       axios
-        .get('https://protected-bastion-53873.herokuapp.com/api/customers', {
+        .get('https://protected-bastion-53873.herokuapp.com/api/orders', {
           headers: {
             Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
           },
