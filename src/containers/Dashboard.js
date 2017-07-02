@@ -30,12 +30,7 @@ class Dashboard extends Component {
   }
   render() {
     const { vendasState } = this.props;
-    console.log(
-      _.flatMap(vendasState.data, x => x.items).reduce((acc, a) => {
-        const value = Number(a.quantity) * Number(a.product_id.price);
-        return acc + value;
-      }, 0),
-    );
+
     const totalVendas = vendasState.hasData
       ? _.flatMap(vendasState.data, x => x.items).reduce((acc, a) => {
         const value = Number(a.quantity) * Number(a.product_id.price);
@@ -45,7 +40,7 @@ class Dashboard extends Component {
     const totalEmAberto = '0.00';
     return (
       <ActionButton {...this.props}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#FFF' }}>
           <Navbar
             titleString="Bem vindo!"
             onPressLeft={() => this.props.navigation.navigate('DrawerOpen')}
