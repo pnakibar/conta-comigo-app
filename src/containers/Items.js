@@ -70,8 +70,10 @@ class Items extends Component {
               {itemsState.isFetching
                 ? <Spinner />
                 : <SalesList
+                  onTouch={() => {}}
                   data={itemsState.data.map(item => ({
                     label: item.name,
+                    id: item.id,
                     value: `R$ ${numeral(item.price).format('0.00')}`,
                   }))}
                 />}

@@ -106,7 +106,7 @@ class Vendas extends Component {
             <View style={styles.salesContainer}>
               {vendasState.isFetching === true
                 ? <Spinner />
-                : <SalesList data={data} />}
+                : <SalesList data={data} onTouch={() => {}} />}
             </View>
           </View>
         </View>

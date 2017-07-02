@@ -80,7 +80,7 @@ export default class ModalSelector extends Component {
       d.label.toLowerCase().startsWith(this.state.filter.toLowerCase()),
     );
     return filteredData.map(d => (
-      <View key={d.label} style={style.rowContainer}>
+      <View key={d.id} style={style.rowContainer}>
         <TouchableOpacity onPress={() => this.selectData(d)}>
           <Text style={style.rowText}>{d.label || d}</Text>
         </TouchableOpacity>

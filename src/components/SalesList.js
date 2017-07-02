@@ -39,7 +39,11 @@ const Line = ({ label, value, onTouch }) => (
 const SalesList = props => (
   <View>
     {props.data.map(line => (
-      <Line key={`${line.label}`} onTouch={props.onTouch} {...line} />
+      <Line
+        key={`${line.label}-${line.id}`}
+        onTouch={props.onTouch}
+        {...line}
+      />
     ))}
   </View>
 );
