@@ -1,7 +1,19 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
-import defaults from "./../defaults";
-import logo from "./../res/logo-with-name.png;
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Spinner } from 'native-base';
+import defaults from './../defaults';
+import { actions as loginActions } from './../state/login';
+import logo from './../res/logo-with-name.png';
 
 const styles = StyleSheet.create({
   combo: {
@@ -29,24 +41,115 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class Login extends Component {
-  static navigationOptions = {
-    drawerLabel: 'Login',
-  }
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: '',
       email: '',
       password: '',
+      method: 'login',
     };
     this.login = this.login.bind(this);
+    this.signup = this.login.bind(this);
+    this.renderLogin = this.renderLogin.bind(this);
+    this.renderSignUp = this.renderSignUp.bind(this);
   }
 
   login() {
     const { email, password } = this.state;
-    this.props.navigation.navigate('Dashboard');
+    this.props.loginActions.login({ email, password });
   }
 
+  signup() {
+    const { email, password, name } = this.state;
+  }
+
+  renderSignUp() {
+    return (
+      <View style={styles.combo}>
+        <TextInput
+          underlineColorAndroid={defaults.color.main}
+          selectionColor={defaults.color.main}
+          style={styles.textInput}
+          placeholder="Nome"
+          onChange={name => this.setState({ name })}
+        />
+        <TextInput
+          underlineColorAndroid={defaults.color.main}
+          selectionColor={defaults.color.main}
+          style={styles.textInput}
+          placeholder="E-email"
+          keyboardType="email-address"
+          onChange={email => this.setState({ email })}
+        />
+        <TextInput
+          selectionColor={defaults.color.main}
+          underlineColorAndroid={defaults.color.main}
+          style={styles.textInput}
+          placeholder="Senha"
+          secureTextEntry
+          onChange={password => this.setState({ password })}
+        />
+        <Button
+          title="Registro"
+          onPress={() => this.signup()}
+          color={defaults.color.main}
+        />
+        <TouchableOpacity onPress={() => this.setState({ method: 'login' })}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.forgotPassword} textAlign="center">
+              Já tem conta?
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  renderLogin() {
+    return (
+      <View style={styles.combo}>
+        <TextInput
+          underlineColorAndroid={defaults.color.main}
+          selectionColor={defaults.color.main}
+          style={styles.textInput}
+          placeholder="E-email"
+          keyboardType="email-address"
+          onChange={email => this.setState({ email })}
+        />
+        <TextInput
+          selectionColor={defaults.color.main}
+          underlineColorAndroid={defaults.color.main}
+          style={styles.textInput}
+          placeholder="Senha"
+          secureTextEntry
+          onChange={password => this.setState({ password })}
+        />
+        <Button
+          title="Login"
+          onPress={() => this.login()}
+          color={defaults.color.main}
+        />
+        <TouchableOpacity onPress={() => this.setState({ method: 'signup' })}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.forgotPassword} textAlign="center">
+              Primeiro Acesso?
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -57,33 +160,23 @@ export default class Login extends Component {
         <Text textAlign="center" style={styles.text}>
           O seu aplicativo de controle de vendas.
         </Text>
-        <View style={styles.combo}>
-          <TextInput
-            underlineColorAndroid={defaults.color.main}
-            selectionColor={defaults.color.main}
-            style={styles.textInput}
-            placeholder="E-email"
-            keyboardType="email-address"
-            onChange={email => this.setState({ email })}
-          />
-          <TextInput
-            selectionColor={defaults.color.main}
-            underlineColorAndroid={defaults.color.main}
-            style={styles.textInput}
-            placeholder="Senha"
-            secureTextEntry
-            onChange={password => this.setState({ password })}
-          />
-          <Button
-            title="Login"
-            onPress={this.login}
-            color={defaults.color.main}
-          />
-        </View>
-        <Text style={styles.forgotPassword} textAlign="center">
-          Esqueceu a senha?
+        <Text textAlign="center" style={[styles.text, { color: 'red' }]}>
+          {this.props.loginState.error || ' '}
         </Text>
+        {this.state.method === 'login'
+          ? this.renderLogin()
+          : this.renderSignUp()}
+        {this.props.loginState.isLoading ? <Spinner /> : <Spinner color="white" />}
       </View>
     );
   }
 }
+
+export default connect(
+  state => ({
+    loginState: state.login,
+  }),
+  dispatch => ({
+    loginActions: bindActionCreators(loginActions, dispatch),
+  }),
+)(Login);
