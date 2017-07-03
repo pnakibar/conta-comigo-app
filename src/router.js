@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { AsyncStorage, View } from 'react-native';
 import { DrawerNavigator, StackNavigator } from 'react-navigation';
 import Dashboard from './containers/Dashboard';
 import Vendas from './containers/Vendas';
@@ -9,6 +11,9 @@ import NovoItem from './containers/NovoItem';
 import Items from './containers/Items';
 import Clientes from './containers/Clientes';
 import Login from './containers/Login';
+import Logout from './containers/Logout';
+
+import { actions as loginActions } from './state/login';
 
 const Router = StackNavigator(
   {
@@ -26,6 +31,9 @@ const Router = StackNavigator(
         },
         Clientes: {
           screen: Clientes,
+        },
+        Logout: {
+          screen: Logout,
         },
       }),
     },
@@ -46,27 +54,37 @@ class GeneralNavigator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      shouldLogin: true,
+      isLoading: true,
     };
   }
 
-  componentWillMount() {
-    AsyncStorage.getItem('authorization')
-      .then((v) => {
-        if (v.length > 0) {
-          return this.setState({ shouldLogin: false });
-        }
-        return this.setState({ shouldLogin: true });
-      })
-      .catch(() => this.setState({ shouldLogin: true }));
+  async componentWillMount() {
+    try {
+      const auth = await AsyncStorage.getItem('authorization');
+      if (auth) {
+        this.props.loginActions.setToken(auth);
+      }
+      this.setState({ isLoading: false });
+    } catch (e) {
+      // do nothing
+    }
   }
 
   render() {
-    if (this.state.shouldLogin === true) {
+    if (this.state.isLoading) {
+      return <View />; // splash
+    }
+    if (!this.props.loginState.authorization) {
       return <Login />;
     }
     return <Router />;
   }
 }
-export default GeneralNavigator;
-// export default GeneralNavigator;
+export default connect(
+  state => ({
+    loginState: state.login,
+  }),
+  dispatch => ({
+    loginActions: bindActionCreators(loginActions, dispatch),
+  }),
+)(GeneralNavigator);

@@ -51,7 +51,7 @@ class Login extends Component {
       method: 'login',
     };
     this.login = this.login.bind(this);
-    this.signup = this.login.bind(this);
+    this.signup = this.signup.bind(this);
     this.renderLogin = this.renderLogin.bind(this);
     this.renderSignUp = this.renderSignUp.bind(this);
   }
@@ -63,6 +63,7 @@ class Login extends Component {
 
   signup() {
     const { email, password, name } = this.state;
+    this.props.loginActions.signup({ email, password, name });
   }
 
   renderSignUp() {
@@ -73,7 +74,7 @@ class Login extends Component {
           selectionColor={defaults.color.main}
           style={styles.textInput}
           placeholder="Nome"
-          onChange={name => this.setState({ name })}
+          onChangeText={name => this.setState({ name })}
         />
         <TextInput
           underlineColorAndroid={defaults.color.main}
@@ -81,7 +82,7 @@ class Login extends Component {
           style={styles.textInput}
           placeholder="E-email"
           keyboardType="email-address"
-          onChange={email => this.setState({ email })}
+          onChangeText={email => this.setState({ email })}
         />
         <TextInput
           selectionColor={defaults.color.main}
@@ -89,7 +90,7 @@ class Login extends Component {
           style={styles.textInput}
           placeholder="Senha"
           secureTextEntry
-          onChange={password => this.setState({ password })}
+          onChangeText={password => this.setState({ password })}
         />
         <Button
           title="Registro"
@@ -120,7 +121,7 @@ class Login extends Component {
           style={styles.textInput}
           placeholder="E-email"
           keyboardType="email-address"
-          onChange={email => this.setState({ email })}
+          onChangeText={email => this.setState({ email })}
         />
         <TextInput
           selectionColor={defaults.color.main}
@@ -128,7 +129,7 @@ class Login extends Component {
           style={styles.textInput}
           placeholder="Senha"
           secureTextEntry
-          onChange={password => this.setState({ password })}
+          onChangeText={password => this.setState({ password })}
         />
         <Button
           title="Login"
@@ -161,12 +162,14 @@ class Login extends Component {
           O seu aplicativo de controle de vendas.
         </Text>
         <Text textAlign="center" style={[styles.text, { color: 'red' }]}>
-          {this.props.loginState.error || ' '}
+          {this.props.loginState.error}
         </Text>
         {this.state.method === 'login'
           ? this.renderLogin()
           : this.renderSignUp()}
-        {this.props.loginState.isLoading ? <Spinner /> : <Spinner color="white" />}
+        {this.props.loginState.isLoading
+          ? <Spinner />
+          : <Spinner color="white" />}
       </View>
     );
   }
