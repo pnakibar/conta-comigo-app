@@ -43,6 +43,7 @@ class NovoItem extends Component {
             onPress={() => {
               const { nome, valor } = this.refs.form.getValue();
               this.props.itemsActions.create({ price: valor, name: nome });
+              this.props.itemsActions.fetch(true);
               this.props.navigation.navigate('Itens');
             }}
           />
