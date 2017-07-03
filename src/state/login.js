@@ -51,7 +51,8 @@ function signup({ email, password, name }) {
     } catch (e) {
       dispatch({
         type: types.HAS_ERROR,
-        error: e.response.data.message || 'Usuário já registrado com esse email',
+        error: e.response.data.message ||
+          'Ocorreu um erro no registro, tente novamente.',
       });
     }
   };
