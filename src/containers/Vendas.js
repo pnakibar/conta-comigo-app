@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { Spinner } from 'native-base';
 import _ from 'lodash';
 import moment from 'moment';
-import 'moment/locale/pt-br';
 import numeral from 'numeral';
 
 import { actions as vendasActions } from './../state/vendas';
@@ -61,7 +60,6 @@ class Vendas extends Component {
   render() {
     const { vendasState } = this.props;
     // boa sorte
-    moment.locale('pt');
     const data = vendasState.hasData
       ? _.flow(
           v => _.flatMap(v, x => x.items),
