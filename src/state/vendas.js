@@ -8,7 +8,7 @@ export const types = {
 };
 function fetch(refresh = false) {
   return (dispatch, getState) => {
-    const { vendas } = getState();
+    const { vendas, login } = getState();
     const doesNotHaveData = !vendas.hasData;
     const isNotFetching = !vendas.isFetching;
     if (refresh || doesNotHaveData || isNotFetching) {
@@ -16,7 +16,7 @@ function fetch(refresh = false) {
       axios
         .get('https://protected-bastion-53873.herokuapp.com/api/orders', {
           headers: {
-            Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
+            Authorization: login.authorization,
           },
         })
         .then((response) => {
@@ -38,7 +38,7 @@ function fetch(refresh = false) {
   };
 }
 function create(order) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: types.IS_CREATING });
     axios
       .post(
@@ -46,7 +46,7 @@ function create(order) {
         { order: { ...order } },
       {
         headers: {
-          Authorization: 'd87cfe94-6665-4c63-b5b9-58a3c1498545',
+          Authorization: getState().login.authorization,
         },
       },
       )
