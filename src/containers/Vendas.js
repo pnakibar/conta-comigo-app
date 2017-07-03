@@ -81,6 +81,7 @@ class Vendas extends Component {
           v =>
             Object.keys(v).map(k => ({
               label: k,
+              id: k,
               value: v[k].reduce((acc, a) => {
                 const totalValue =
                   Number(a.quantity) * Number(a.product_id.price);
