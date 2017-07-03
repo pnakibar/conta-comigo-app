@@ -57,6 +57,7 @@ class Clientes extends Component {
     const { clientesState } = this.props;
     const data = clientesState.data.map(value => ({
       label: value.name || 'no_visible_name',
+      id: value.id,
       value: _.flow(
         v => _.flatMap(v, orders => orders.items),
         v =>

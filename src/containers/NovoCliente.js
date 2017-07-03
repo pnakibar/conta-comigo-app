@@ -32,7 +32,7 @@ class NovoCliente extends Component {
     const { nome, telefone, email } = this.refs.form.getValue();
     const payload = {
       name: nome,
-      phone: telefone,
+      phone: String(telefone),
       email,
     };
     this.props.clientesActions.create(payload);
