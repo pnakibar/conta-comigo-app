@@ -33,7 +33,6 @@ function login({ email, password }) {
   };
 }
 function signup({ email, password, name }) {
-  console.log(email, password, name);
   return async (dispatch) => {
     try {
       dispatch({ type: types.IS_LOADING });
@@ -42,20 +41,17 @@ function signup({ email, password, name }) {
         'https://protected-bastion-53873.herokuapp.com/api/registrations',
         payload,
       );
-      console.log(payload);
       const token = response.data.token;
       dispatch({
         type: types.HAS_FETCHED,
         authorization: token,
         hasAuthorization: true,
       });
-      console.log('token', token);
       await AsyncStorage.setItem('authorization', token);
     } catch (e) {
-      console.log(e);
       dispatch({
         type: types.HAS_ERROR,
-        error: e.response.data.message,
+        error: e.response.data.message || 'Usuário já registrado com esse email',
       });
     }
   };
